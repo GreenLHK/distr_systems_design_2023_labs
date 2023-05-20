@@ -32,10 +32,8 @@ def send_get_random_messages():
     return req1
 
 def send_in_queue(msg):
-    client = hazelcast.HazelcastClient()
     queue = client.get_queue("queue")
     queue.put(msg)
-    #client.shutdown()
 
 def send_get_for_full_messages():
     req = None
@@ -105,5 +103,7 @@ def post():
         content_type=req1.headers['content-type'],
     )
     #return jsonify(result={"status": 200})
-
+client = hazelcast.HazelcastClient()
 app.run(debug=True, host="127.0.0.1", port=7070)
+#Stop Hazelcast client after Flask shutdown
+client.shutdown()
